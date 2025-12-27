@@ -38,3 +38,75 @@ export interface CarListItem {
   imageUrl?: string;
   isAvailable: boolean;
 }
+
+export interface Feature {
+  id: string;
+  name: string;
+  description?: string;
+  category: string;
+}
+
+export interface CreateFeature {
+  name: string;
+  description?: string;
+  category: string;
+}
+
+export interface UpdateFeature {
+  name: string;
+  description?: string;
+  category: string;
+}
+
+export interface CarDetail {
+  id: string;
+  brandId: string;
+  model: string;
+  year: number;
+  price: number;
+  mileage: number;
+  description?: string;
+  imageUrl?: string;
+  isAvailable: boolean;
+  createdAt: string;
+  brand: Brand;
+  features: CarFeature[];
+}
+
+export interface CarFeature {
+  featureId: string;
+  featureName: string;
+  category: string;
+  isStandard: boolean;
+  additionalPrice: number;
+}
+
+export interface CreateCar {
+  brandId: string;
+  model: string;
+  year: number;
+  price: number;
+  mileage: number;
+  description?: string;
+  imageUrl?: string;
+  isAvailable: boolean;
+  features: CreateCarFeature[];
+}
+
+export interface CreateCarFeature {
+  featureId: string;
+  isStandard: boolean;
+  additionalPrice: number;
+}
+
+export interface UpdateCar {
+  brandId: string;
+  model: string;
+  year: number;
+  price: number;
+  mileage: number;
+  description?: string;
+  imageUrl?: string;
+  isAvailable: boolean;
+  features: CreateCarFeature[];
+}

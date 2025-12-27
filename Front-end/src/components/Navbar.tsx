@@ -16,6 +16,9 @@ export default function Navbar() {
               <Link to="/brands" className="hover:bg-gray-700 px-3 py-2 rounded-md">
                 Brands
               </Link>
+              <Link to="/features" className="hover:bg-gray-700 px-3 py-2 rounded-md">
+                Features
+              </Link>
             </div>
           </div>
           <div className="flex items-center space-x-4">

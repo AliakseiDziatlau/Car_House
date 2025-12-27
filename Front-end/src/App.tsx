@@ -4,12 +4,15 @@ import Home from './pages/Home';
 import { BrandList, BrandDetails, BrandForm } from './pages/Brands';
 import { FeatureList, FeatureDetails, FeatureForm } from './pages/Features';
 import { CarList, CarDetails, CarForm } from './pages/Cars';
+import { Login, Register } from './pages/Auth';
 
 export default function App() {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />
+        <Route path="login" element={<Login />} />
+        <Route path="register" element={<Register />} />
         <Route path="brands" element={<BrandList />} />
         <Route path="brands/new" element={<BrandForm />} />
         <Route path="brands/:id" element={<BrandDetails />} />

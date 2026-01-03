@@ -17,9 +17,9 @@ public class BrandService : IBrandService
         _mapper = mapper;
     }
 
-    public async Task<PagedResult<BrandDto>> GetAllAsync(int page, int pageSize)
+    public async Task<PagedResult<BrandDto>> GetAllAsync(int page, int pageSize, List<string>? countries = null)
     {
-        var (items, totalCount) = await _brandRepository.GetPagedAsync(page, pageSize);
+        var (items, totalCount) = await _brandRepository.GetPagedFilteredAsync(page, pageSize, countries);
         return new PagedResult<BrandDto>
         {
             Items = _mapper.Map<IEnumerable<BrandDto>>(items),

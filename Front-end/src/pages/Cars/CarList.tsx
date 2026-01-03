@@ -1,26 +1,72 @@
 import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import api from '../../services/api';
+import { useAuth } from '../../context/AuthContext';
 import Pagination from '../../components/Pagination';
-import type { CarListItem, Brand, PagedResult } from '../../types';
+import CarFilters from '../../components/CarFilters';
+import type { CarListItem, Brand, Feature, PagedResult } from '../../types';
+
+const FILTERS_COLLAPSED_KEY = 'car-filters-collapsed';
+const FILTERS_COUNTRIES_KEY = 'car-filters-countries';
+const FILTERS_BRANDS_KEY = 'car-filters-brands';
+const FILTERS_FEATURES_KEY = 'car-filters-features';
 
 export default function CarList() {
+  const { t } = useTranslation();
+  const { hasRole } = useAuth();
+  const canManage = hasRole('Manager', 'Admin');
   const [searchParams, setSearchParams] = useSearchParams();
   const [cars, setCars] = useState<CarListItem[]>([]);
   const [brands, setBrands] = useState<Brand[]>([]);
+  const [features, setFeatures] = useState<Feature[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [selectedBrand, setSelectedBrand] = useState<string>(searchParams.get('brandId') || '');
+  const [selectedCountries, setSelectedCountries] = useState<string[]>(() => {
+    const saved = localStorage.getItem(FILTERS_COUNTRIES_KEY);
+    return saved ? JSON.parse(saved) : [];
+  });
+  const [selectedBrandIds, setSelectedBrandIds] = useState<string[]>(() => {
+    const brandId = searchParams.get('brandId');
+    if (brandId) return [brandId];
+    const saved = localStorage.getItem(FILTERS_BRANDS_KEY);
+    return saved ? JSON.parse(saved) : [];
+  });
+  const [selectedFeatureIds, setSelectedFeatureIds] = useState<string[]>(() => {
+    const saved = localStorage.getItem(FILTERS_FEATURES_KEY);
+    return saved ? JSON.parse(saved) : [];
+  });
+  const [filtersCollapsed, setFiltersCollapsed] = useState(() => {
+    return localStorage.getItem(FILTERS_COLLAPSED_KEY) === 'true';
+  });
 
   useEffect(() => {
     fetchBrands();
+    fetchFeatures();
   }, []);
 
   useEffect(() => {
     fetchCars();
-  }, [page, selectedBrand]);
+  }, [page, selectedCountries, selectedBrandIds, selectedFeatureIds, canManage]);
+
+  useEffect(() => {
+    localStorage.setItem(FILTERS_COLLAPSED_KEY, filtersCollapsed ? 'true' : '');
+  }, [filtersCollapsed]);
+
+  useEffect(() => {
+    localStorage.setItem(FILTERS_COUNTRIES_KEY, JSON.stringify(selectedCountries));
+  }, [selectedCountries]);
+
+  useEffect(() => {
+    localStorage.setItem(FILTERS_BRANDS_KEY, JSON.stringify(selectedBrandIds));
+  }, [selectedBrandIds]);
+
+  useEffect(() => {
+    localStorage.setItem(FILTERS_FEATURES_KEY, JSON.stringify(selectedFeatureIds));
+  }, [selectedFeatureIds]);
 
   const fetchBrands = async () => {
     try {
@@ -33,140 +79,210 @@ export default function CarList() {
     }
   };
 
+  const fetchFeatures = async () => {
+    try {
+      const response = await api.get<PagedResult<Feature>>('/features', {
+        params: { pageSize: 100 },
+      });
+      setFeatures(response.data.items);
+    } catch {
+      console.error('Failed to load features');
+    }
+  };
+
   const fetchCars = async () => {
     try {
       setLoading(true);
-      const params: Record<string, string | number> = { page, pageSize: 9 };
-      if (selectedBrand) {
-        params.brandId = selectedBrand;
+      const params: Record<string, string | number | string[] | boolean> = { page, pageSize: 9 };
+
+      if (!canManage) {
+        params.isAvailable = true;
       }
+
+      if (selectedCountries.length > 0) {
+        params.countries = selectedCountries;
+      }
+
+      if (selectedBrandIds.length > 0) {
+        params.brandIds = selectedBrandIds;
+      }
+
+      if (selectedFeatureIds.length > 0) {
+        params.featureIds = selectedFeatureIds;
+      }
+
       const response = await api.get<PagedResult<CarListItem>>('/cars', { params });
       setCars(response.data.items);
       setTotalPages(response.data.totalPages);
     } catch {
-      setError('Failed to load cars');
+      setError(t('cars.loadError'));
     } finally {
       setLoading(false);
     }
   };
 
-  const handleBrandFilter = (brandId: string) => {
-    setSelectedBrand(brandId);
+  const handleCountriesChange = (countries: string[]) => {
+    setSelectedCountries(countries);
     setPage(1);
-    if (brandId) {
-      setSearchParams({ brandId });
+  };
+
+  const handleBrandsChange = (brandIds: string[]) => {
+    setSelectedBrandIds(brandIds);
+    setPage(1);
+    if (brandIds.length === 1) {
+      setSearchParams({ brandId: brandIds[0] });
     } else {
       setSearchParams({});
     }
   };
 
+  const handleFeaturesChange = (featureIds: string[]) => {
+    setSelectedFeatureIds(featureIds);
+    setPage(1);
+  };
+
+  const handleClearFilters = () => {
+    setSelectedCountries([]);
+    setSelectedBrandIds([]);
+    setSelectedFeatureIds([]);
+    setPage(1);
+    setSearchParams({});
+    localStorage.removeItem(FILTERS_COUNTRIES_KEY);
+    localStorage.removeItem(FILTERS_BRANDS_KEY);
+    localStorage.removeItem(FILTERS_FEATURES_KEY);
+  };
+
   const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this car?')) return;
+    if (!confirm(t('cars.deleteConfirm'))) return;
     try {
       await api.delete(`/cars/${id}`);
       fetchCars();
     } catch {
-      setError('Failed to delete car');
+      setError(t('cars.deleteError'));
     }
   };
 
-  if (loading && cars.length === 0) return <div className="text-center py-8">Loading...</div>;
-  if (error) return <div className="text-center py-8 text-red-600">{error}</div>;
+  if (loading && cars.length === 0) return <div className="text-center py-8 text-gray-400">{t('common.loading')}</div>;
+  if (error) return <div className="text-center py-8 text-red-400">{error}</div>;
 
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Cars</h1>
-        <Link
-          to="/cars/new"
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-        >
-          Add Car
-        </Link>
+        <h1 className="text-2xl font-bold text-white">{t('cars.title')}</h1>
+        {canManage && (
+          <Link
+            to="/cars/new"
+            className="inline-flex items-center justify-center h-9 px-4 bg-orange-500 text-white text-sm font-medium rounded-md shadow-sm transition-all duration-150 outline-none hover:bg-orange-600 focus-visible:ring-2 focus-visible:ring-orange-500/50"
+          >
+            {t('cars.addCar')}
+          </Link>
+        )}
       </div>
 
-      <div className="mb-6">
-        <label htmlFor="brandFilter" className="block text-sm font-medium text-gray-700 mb-1">
-          Filter by Brand
-        </label>
-        <select
-          id="brandFilter"
-          value={selectedBrand}
-          onChange={(e) => handleBrandFilter(e.target.value)}
-          className="w-full md:w-64 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+      <div className="flex gap-6">
+        <div
+          className={`transition-[width] duration-200 ease-linear overflow-hidden shrink-0 ${
+            filtersCollapsed ? 'w-0' : 'w-72'
+          }`}
         >
-          <option value="">All Brands</option>
-          {brands.map((brand) => (
-            <option key={brand.id} value={brand.id}>
-              {brand.name}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {cars.length === 0 ? (
-        <p className="text-center py-8 text-gray-500">No cars found.</p>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {cars.map((car) => (
-            <div key={car.id} className="bg-white rounded-lg shadow overflow-hidden">
-              {car.imageUrl ? (
-                <img
-                  src={car.imageUrl}
-                  alt={car.model}
-                  className="h-48 w-full object-cover"
-                />
-              ) : (
-                <div className="h-48 bg-gray-200 flex items-center justify-center">
-                  <span className="text-gray-500">No Image</span>
-                </div>
-              )}
-              <div className="p-4">
-                <div className="flex justify-between items-start mb-2">
-                  <div>
-                    <h3 className="font-semibold text-lg">{car.model}</h3>
-                    <p className="text-gray-600">{car.brandName} • {car.year}</p>
-                  </div>
-                  <span
-                    className={`px-2 py-1 rounded text-xs font-medium ${
-                      car.isAvailable
-                        ? 'bg-green-100 text-green-800'
-                        : 'bg-red-100 text-red-800'
-                    }`}
-                  >
-                    {car.isAvailable ? 'Available' : 'Sold'}
-                  </span>
-                </div>
-                <p className="text-blue-600 font-bold text-xl mb-4">
-                  ${car.price.toLocaleString()}
-                </p>
-                <div className="flex gap-2">
-                  <Link
-                    to={`/cars/${car.id}`}
-                    className="flex-1 text-center bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
-                  >
-                    View
-                  </Link>
-                  <Link
-                    to={`/cars/${car.id}/edit`}
-                    className="flex-1 text-center bg-gray-200 text-gray-800 py-2 rounded hover:bg-gray-300"
-                  >
-                    Edit
-                  </Link>
-                  <button
-                    onClick={() => handleDelete(car.id)}
-                    className="px-4 py-2 bg-red-100 text-red-600 rounded hover:bg-red-200"
-                  >
-                    Delete
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
+          <div className="min-w-[288px]">
+            <CarFilters
+              brands={brands}
+              features={features}
+              selectedCountries={selectedCountries}
+              selectedBrandIds={selectedBrandIds}
+              selectedFeatureIds={selectedFeatureIds}
+              onCountriesChange={handleCountriesChange}
+              onBrandsChange={handleBrandsChange}
+              onFeaturesChange={handleFeaturesChange}
+              onClearFilters={handleClearFilters}
+            />
+          </div>
         </div>
-      )}
 
-      <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
+        <div className="relative flex-1 min-w-0">
+          <button
+            onClick={() => setFiltersCollapsed(!filtersCollapsed)}
+            className="absolute -left-3 top-0 z-10 h-6 w-6 rounded-full border border-gray-600 bg-gray-800 shadow-sm hover:bg-gray-700 flex items-center justify-center transition-colors"
+            aria-label={filtersCollapsed ? t('filters.show') : t('filters.hide')}
+            title={filtersCollapsed ? t('filters.show') : t('filters.hide')}
+          >
+            {filtersCollapsed ? (
+              <ChevronRight className="h-3 w-3 text-gray-400" />
+            ) : (
+              <ChevronLeft className="h-3 w-3 text-gray-400" />
+            )}
+          </button>
+
+          {cars.length === 0 ? (
+            <p className="text-center py-8 text-gray-400">{t('cars.noCars')}</p>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {cars.map((car) => (
+                <div key={car.id} className="bg-gray-800 rounded-lg shadow overflow-hidden">
+                  {car.imageUrl ? (
+                    <img
+                      src={car.imageUrl}
+                      alt={car.model}
+                      className="h-48 w-full object-cover"
+                    />
+                  ) : (
+                    <div className="h-48 bg-gray-700 flex items-center justify-center">
+                      <span className="text-gray-500">{t('common.noImage')}</span>
+                    </div>
+                  )}
+                  <div className="p-4">
+                    <div className="flex justify-between items-start mb-2">
+                      <div>
+                        <h3 className="font-semibold text-lg text-white">{car.model}</h3>
+                        <p className="text-gray-400">{car.brandName} • {car.year}</p>
+                      </div>
+                      <span
+                        className={`px-2 py-1 rounded text-xs font-medium ${
+                          car.isAvailable
+                            ? 'bg-green-100 text-green-800'
+                            : 'bg-red-100 text-red-800'
+                        }`}
+                      >
+                        {car.isAvailable ? t('common.available') : t('common.sold')}
+                      </span>
+                    </div>
+                    <p className="text-orange-500 font-bold text-xl mb-4">
+                      ${car.price.toLocaleString()}
+                    </p>
+                    <div className="flex gap-2">
+                      <Link
+                        to={`/cars/${car.id}`}
+                        className="flex-1 inline-flex items-center justify-center h-9 bg-orange-500 text-white text-sm font-medium rounded-md shadow-sm transition-all duration-150 outline-none hover:bg-orange-600 focus-visible:ring-2 focus-visible:ring-orange-500/50"
+                      >
+                        {t('common.view')}
+                      </Link>
+                      {canManage && (
+                        <>
+                          <Link
+                            to={`/cars/${car.id}/edit`}
+                            className="flex-1 inline-flex items-center justify-center h-9 border border-gray-600 bg-gray-800/50 text-white text-sm font-medium rounded-md shadow-sm transition-all duration-150 outline-none hover:bg-gray-700 hover:border-gray-500 focus-visible:ring-2 focus-visible:ring-orange-500/50"
+                          >
+                            {t('common.edit')}
+                          </Link>
+                          <button
+                            onClick={() => handleDelete(car.id)}
+                            className="inline-flex items-center justify-center h-9 px-3 text-sm font-medium text-red-400 rounded-md transition-all duration-150 outline-none hover:bg-red-500/10 focus-visible:ring-2 focus-visible:ring-red-500/50"
+                          >
+                            {t('common.delete')}
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
+        </div>
+      </div>
     </div>
   );
 }

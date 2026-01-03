@@ -66,6 +66,22 @@ public class OrderService : IOrderService
 
         order.Status = dto.Status;
         _orderRepository.Update(order);
+
+        var car = await _carRepository.GetByIdAsync(order.CarId);
+        if (car != null)
+        {
+            if (dto.Status == "Completed")
+            {
+                car.IsAvailable = false;
+                _carRepository.Update(car);
+            }
+            else if (dto.Status == "Cancelled")
+            {
+                car.IsAvailable = true;
+                _carRepository.Update(car);
+            }
+        }
+
         await _orderRepository.SaveChangesAsync();
 
         return await GetByIdAsync(id);

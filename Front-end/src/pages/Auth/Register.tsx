@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
 
 const registerSchema = z.object({
@@ -30,6 +31,7 @@ const registerSchema = z.object({
 type RegisterFormData = z.infer<typeof registerSchema>;
 
 export default function Register() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { register: registerUser } = useAuth();
   const [error, setError] = useState<string | null>(null);
@@ -54,91 +56,91 @@ export default function Register() {
       await registerUser(data);
       navigate('/');
     } catch {
-      setError('Registration failed. Email may already be in use.');
+      setError(t('auth.registrationFailed'));
     }
   };
 
   return (
     <div className="max-w-md mx-auto">
-      <h1 className="text-2xl font-bold mb-6 text-center">Register</h1>
+      <h1 className="text-2xl font-bold mb-6 text-center text-white">{t('auth.registerTitle')}</h1>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="bg-white rounded-lg shadow p-6">
+      <form onSubmit={handleSubmit(onSubmit)} className="bg-gray-800 rounded-lg shadow p-6">
         {error && (
-          <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md">{error}</div>
+          <div className="mb-4 p-3 bg-red-900/50 text-red-400 rounded-md">{error}</div>
         )}
 
         <div className="mb-4">
-          <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
-            First Name
+          <label htmlFor="firstName" className="block text-sm font-medium text-gray-300 mb-1">
+            {t('auth.firstName')}
           </label>
           <input
             type="text"
             id="firstName"
             {...register('firstName')}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full h-10 px-3 py-2 border border-gray-600 bg-gray-700/50 text-white rounded-md shadow-sm transition-all duration-150 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/30 placeholder:text-gray-500"
           />
           {errors.firstName && (
-            <p className="mt-1 text-sm text-red-600">{errors.firstName.message}</p>
+            <p className="mt-1 text-sm text-red-400">{errors.firstName.message}</p>
           )}
         </div>
 
         <div className="mb-4">
-          <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">
-            Last Name
+          <label htmlFor="lastName" className="block text-sm font-medium text-gray-300 mb-1">
+            {t('auth.lastName')}
           </label>
           <input
             type="text"
             id="lastName"
             {...register('lastName')}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full h-10 px-3 py-2 border border-gray-600 bg-gray-700/50 text-white rounded-md shadow-sm transition-all duration-150 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/30 placeholder:text-gray-500"
           />
           {errors.lastName && (
-            <p className="mt-1 text-sm text-red-600">{errors.lastName.message}</p>
+            <p className="mt-1 text-sm text-red-400">{errors.lastName.message}</p>
           )}
         </div>
 
         <div className="mb-4">
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-            Email
+          <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-1">
+            {t('auth.email')}
           </label>
           <input
             type="email"
             id="email"
             {...register('email')}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full h-10 px-3 py-2 border border-gray-600 bg-gray-700/50 text-white rounded-md shadow-sm transition-all duration-150 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/30 placeholder:text-gray-500"
           />
           {errors.email && (
-            <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
+            <p className="mt-1 text-sm text-red-400">{errors.email.message}</p>
           )}
         </div>
 
         <div className="mb-6">
-          <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-            Password
+          <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-1">
+            {t('auth.password')}
           </label>
           <input
             type="password"
             id="password"
             {...register('password')}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full h-10 px-3 py-2 border border-gray-600 bg-gray-700/50 text-white rounded-md shadow-sm transition-all duration-150 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/30 placeholder:text-gray-500"
           />
           {errors.password && (
-            <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
+            <p className="mt-1 text-sm text-red-400">{errors.password.message}</p>
           )}
         </div>
 
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:opacity-50"
+          className="w-full h-10 bg-orange-500 text-white font-medium rounded-md shadow-sm transition-all duration-150 outline-none hover:bg-orange-600 focus-visible:ring-2 focus-visible:ring-orange-500/50 disabled:opacity-50 disabled:pointer-events-none"
         >
-          {isSubmitting ? 'Registering...' : 'Register'}
+          {isSubmitting ? t('auth.registering') : t('auth.registerTitle')}
         </button>
 
-        <p className="mt-4 text-center text-sm text-gray-600">
-          Already have an account?{' '}
-          <Link to="/login" className="text-blue-600 hover:underline">
-            Login
+        <p className="mt-4 text-center text-sm text-gray-400">
+          {t('auth.hasAccount')}{' '}
+          <Link to="/login" className="text-orange-500 hover:underline">
+            {t('nav.login')}
           </Link>
         </p>
       </form>

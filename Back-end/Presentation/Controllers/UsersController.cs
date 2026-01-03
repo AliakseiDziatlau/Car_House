@@ -39,4 +39,12 @@ public class UsersController : ControllerBase
         if (user == null) return NotFound();
         return Ok(user);
     }
+
+    [HttpPost]
+    public async Task<ActionResult<UserDto>> Create([FromBody] CreateUserDto dto)
+    {
+        var user = await _userService.CreateAsync(dto);
+        if (user == null) return Conflict(new { message = "Email already exists or invalid role" });
+        return CreatedAtAction(nameof(GetById), new { id = user.Id }, user);
+    }
 }

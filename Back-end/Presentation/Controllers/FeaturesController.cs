@@ -17,9 +17,12 @@ public class FeaturesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<PagedResult<FeatureDto>>> GetAll([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+    public async Task<ActionResult<PagedResult<FeatureDto>>> GetAll(
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 10,
+        [FromQuery] List<string>? categories = null)
     {
-        var result = await _featureService.GetAllAsync(page, pageSize);
+        var result = await _featureService.GetAllAsync(page, pageSize, categories);
         return Ok(result);
     }
 

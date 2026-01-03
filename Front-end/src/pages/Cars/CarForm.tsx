@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { useTranslation } from 'react-i18next';
 import api from '../../services/api';
 import type { Brand, Feature, CarDetail, PagedResult, CreateCarFeature } from '../../types';
 
@@ -25,6 +26,7 @@ interface SelectedFeature extends CreateCarFeature {
 }
 
 export default function CarForm() {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const isEdit = Boolean(id);
@@ -141,7 +143,7 @@ export default function CarForm() {
       }
       navigate('/cars');
     } catch {
-      alert('Failed to save car');
+      alert(t('cars.saveError'));
     }
   };
 
@@ -150,12 +152,17 @@ export default function CarForm() {
       Safety: 'bg-red-100 text-red-800 border-red-200',
       Comfort: 'bg-blue-100 text-blue-800 border-blue-200',
       Technology: 'bg-purple-100 text-purple-800 border-purple-200',
-      Performance: 'bg-orange-100 text-orange-800 border-orange-200',
+      Performance: 'bg-amber-100 text-amber-800 border-amber-200',
     };
     return colors[category] || 'bg-gray-100 text-gray-800 border-gray-200';
   };
 
-  if (loading) return <div className="text-center py-8">Loading...</div>;
+  const getCategoryLabel = (category: string) => {
+    const key = category.toLowerCase() as 'safety' | 'comfort' | 'technology' | 'performance';
+    return t(`features.categories.${key}`);
+  };
+
+  if (loading) return <div className="text-center py-8 text-gray-400">{t('common.loading')}</div>;
 
   const groupedFeatures = features.reduce((acc, feature) => {
     if (!acc[feature.category]) {
@@ -167,23 +174,23 @@ export default function CarForm() {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6">{isEdit ? 'Edit Car' : 'Add Car'}</h1>
+      <h1 className="text-2xl font-bold mb-6 text-white">{isEdit ? t('cars.editCar') : t('cars.addCar')}</h1>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-lg font-semibold mb-4">Basic Information</h2>
+        <div className="bg-gray-800 rounded-lg shadow p-6">
+          <h2 className="text-lg font-semibold mb-4 text-white">{t('cars.basicInfo')}</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="brandId" className="block text-sm font-medium text-gray-700 mb-1">
-                Brand
+              <label htmlFor="brandId" className="block text-sm font-medium text-gray-300 mb-1">
+                {t('common.brand')}
               </label>
               <select
                 id="brandId"
                 {...register('brandId')}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full h-10 px-3 py-2 border border-gray-600 bg-gray-700/50 text-white rounded-md shadow-sm transition-all duration-150 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/30"
               >
-                <option value="">Select a brand</option>
+                <option value="">{t('cars.selectBrand')}</option>
                 {brands.map((brand) => (
                   <option key={brand.id} value={brand.id}>
                     {brand.name}
@@ -191,97 +198,97 @@ export default function CarForm() {
                 ))}
               </select>
               {errors.brandId && (
-                <p className="mt-1 text-sm text-red-600">{errors.brandId.message}</p>
+                <p className="mt-1 text-sm text-red-400">{errors.brandId.message}</p>
               )}
             </div>
 
             <div>
-              <label htmlFor="model" className="block text-sm font-medium text-gray-700 mb-1">
-                Model
+              <label htmlFor="model" className="block text-sm font-medium text-gray-300 mb-1">
+                {t('cars.model')}
               </label>
               <input
                 type="text"
                 id="model"
                 {...register('model')}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full h-10 px-3 py-2 border border-gray-600 bg-gray-700/50 text-white rounded-md shadow-sm transition-all duration-150 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/30"
               />
               {errors.model && (
-                <p className="mt-1 text-sm text-red-600">{errors.model.message}</p>
+                <p className="mt-1 text-sm text-red-400">{errors.model.message}</p>
               )}
             </div>
 
             <div>
-              <label htmlFor="year" className="block text-sm font-medium text-gray-700 mb-1">
-                Year
+              <label htmlFor="year" className="block text-sm font-medium text-gray-300 mb-1">
+                {t('common.year')}
               </label>
               <input
                 type="number"
                 id="year"
                 {...register('year', { valueAsNumber: true })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full h-10 px-3 py-2 border border-gray-600 bg-gray-700/50 text-white rounded-md shadow-sm transition-all duration-150 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/30"
               />
               {errors.year && (
-                <p className="mt-1 text-sm text-red-600">{errors.year.message}</p>
+                <p className="mt-1 text-sm text-red-400">{errors.year.message}</p>
               )}
             </div>
 
             <div>
-              <label htmlFor="mileage" className="block text-sm font-medium text-gray-700 mb-1">
-                Mileage (km)
+              <label htmlFor="mileage" className="block text-sm font-medium text-gray-300 mb-1">
+                {t('cars.mileageKm')}
               </label>
               <input
                 type="number"
                 id="mileage"
                 {...register('mileage', { valueAsNumber: true })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full h-10 px-3 py-2 border border-gray-600 bg-gray-700/50 text-white rounded-md shadow-sm transition-all duration-150 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/30"
               />
               {errors.mileage && (
-                <p className="mt-1 text-sm text-red-600">{errors.mileage.message}</p>
+                <p className="mt-1 text-sm text-red-400">{errors.mileage.message}</p>
               )}
             </div>
 
             <div>
-              <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-1">
-                Price ($)
+              <label htmlFor="price" className="block text-sm font-medium text-gray-300 mb-1">
+                {t('cars.priceUsd')}
               </label>
               <input
                 type="number"
                 id="price"
                 {...register('price', { valueAsNumber: true })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full h-10 px-3 py-2 border border-gray-600 bg-gray-700/50 text-white rounded-md shadow-sm transition-all duration-150 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/30"
               />
               {errors.price && (
-                <p className="mt-1 text-sm text-red-600">{errors.price.message}</p>
+                <p className="mt-1 text-sm text-red-400">{errors.price.message}</p>
               )}
             </div>
 
             <div>
-              <label htmlFor="imageUrl" className="block text-sm font-medium text-gray-700 mb-1">
-                Image URL (optional)
+              <label htmlFor="imageUrl" className="block text-sm font-medium text-gray-300 mb-1">
+                {t('cars.imageUrlOptional')}
               </label>
               <input
                 type="text"
                 id="imageUrl"
                 {...register('imageUrl')}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full h-10 px-3 py-2 border border-gray-600 bg-gray-700/50 text-white rounded-md shadow-sm transition-all duration-150 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/30"
               />
               {errors.imageUrl && (
-                <p className="mt-1 text-sm text-red-600">{errors.imageUrl.message}</p>
+                <p className="mt-1 text-sm text-red-400">{errors.imageUrl.message}</p>
               )}
             </div>
 
             <div className="md:col-span-2">
-              <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
-                Description (optional)
+              <label htmlFor="description" className="block text-sm font-medium text-gray-300 mb-1">
+                {t('cars.descriptionOptional')}
               </label>
               <textarea
                 id="description"
                 rows={3}
                 {...register('description')}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full h-10 px-3 py-2 border border-gray-600 bg-gray-700/50 text-white rounded-md shadow-sm transition-all duration-150 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/30"
               />
               {errors.description && (
-                <p className="mt-1 text-sm text-red-600">{errors.description.message}</p>
+                <p className="mt-1 text-sm text-red-400">{errors.description.message}</p>
               )}
             </div>
 
@@ -290,22 +297,22 @@ export default function CarForm() {
                 type="checkbox"
                 id="isAvailable"
                 {...register('isAvailable')}
-                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                className="h-4 w-4 text-orange-500 focus:ring-orange-500 border-gray-600 rounded bg-gray-700"
               />
-              <label htmlFor="isAvailable" className="ml-2 text-sm text-gray-700">
-                Available for sale
+              <label htmlFor="isAvailable" className="ml-2 text-sm text-gray-300">
+                {t('cars.availableForSale')}
               </label>
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-lg font-semibold mb-4">Features</h2>
+        <div className="bg-gray-800 rounded-lg shadow p-6">
+          <h2 className="text-lg font-semibold mb-4 text-white">{t('cars.featuresTitle')}</h2>
 
           {Object.entries(groupedFeatures).map(([category, categoryFeatures]) => (
             <div key={category} className="mb-6 last:mb-0">
               <h3 className={`inline-block px-2 py-1 rounded text-sm font-medium mb-3 ${getCategoryColor(category)}`}>
-                {category}
+                {getCategoryLabel(category)}
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {categoryFeatures.map((feature) => {
@@ -314,7 +321,7 @@ export default function CarForm() {
                     <div
                       key={feature.id}
                       className={`border rounded-lg p-3 cursor-pointer transition ${
-                        selected ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'
+                        selected ? 'border-orange-500 bg-orange-950' : 'border-gray-700 bg-gray-900 hover:border-gray-600'
                       }`}
                       onClick={() => toggleFeature(feature)}
                     >
@@ -325,9 +332,9 @@ export default function CarForm() {
                             checked={!!selected}
                             onChange={() => toggleFeature(feature)}
                             onClick={(e) => e.stopPropagation()}
-                            className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                            className="h-4 w-4 text-orange-500 focus:ring-orange-500 border-gray-600 rounded bg-gray-700"
                           />
-                          <span className="ml-2 font-medium">{feature.name}</span>
+                          <span className="ml-2 font-medium text-white">{feature.name}</span>
                         </div>
                       </div>
                       {selected && (
@@ -340,18 +347,18 @@ export default function CarForm() {
                                 isStandard: e.target.checked,
                                 additionalPrice: e.target.checked ? 0 : selected.additionalPrice
                               })}
-                              className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                              className="h-4 w-4 text-orange-500 focus:ring-orange-500 border-gray-600 rounded bg-gray-700"
                             />
-                            <span className="ml-2 text-sm">Standard (included)</span>
+                            <span className="ml-2 text-sm text-gray-300">{t('cars.standardIncluded')}</span>
                           </label>
                           {!selected.isStandard && (
                             <div className="flex items-center gap-2">
-                              <label className="text-sm text-gray-600">Additional price: $</label>
+                              <label className="text-sm text-gray-400">{t('cars.additionalPrice')}: $</label>
                               <input
                                 type="number"
                                 value={selected.additionalPrice}
                                 onChange={(e) => updateFeature(feature.id, { additionalPrice: Number(e.target.value) })}
-                                className="w-24 px-2 py-1 border border-gray-300 rounded text-sm"
+                                className="w-24 px-2 py-1 border border-gray-600 bg-gray-700 text-white rounded text-sm"
                                 min="0"
                               />
                             </div>
@@ -366,20 +373,20 @@ export default function CarForm() {
           ))}
         </div>
 
-        <div className="flex gap-4">
+        <div className="flex gap-3">
           <button
             type="submit"
             disabled={isSubmitting}
-            className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:opacity-50"
+            className="flex-1 h-10 bg-orange-500 text-white font-medium rounded-md shadow-sm transition-all duration-150 outline-none hover:bg-orange-600 focus-visible:ring-2 focus-visible:ring-orange-500/50 disabled:opacity-50 disabled:pointer-events-none"
           >
-            {isSubmitting ? 'Saving...' : 'Save'}
+            {isSubmitting ? t('common.saving') : t('common.save')}
           </button>
           <button
             type="button"
             onClick={() => navigate('/cars')}
-            className="flex-1 bg-gray-200 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-300"
+            className="flex-1 h-10 border border-gray-600 bg-gray-800/50 text-white font-medium rounded-md shadow-sm transition-all duration-150 outline-none hover:bg-gray-700 hover:border-gray-500 focus-visible:ring-2 focus-visible:ring-orange-500/50"
           >
-            Cancel
+            {t('common.cancel')}
           </button>
         </div>
       </form>

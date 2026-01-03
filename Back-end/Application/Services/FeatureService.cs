@@ -17,9 +17,9 @@ public class FeatureService : IFeatureService
         _mapper = mapper;
     }
 
-    public async Task<PagedResult<FeatureDto>> GetAllAsync(int page, int pageSize)
+    public async Task<PagedResult<FeatureDto>> GetAllAsync(int page, int pageSize, List<string>? categories = null)
     {
-        var (items, totalCount) = await _featureRepository.GetPagedAsync(page, pageSize);
+        var (items, totalCount) = await _featureRepository.GetPagedFilteredAsync(page, pageSize, categories);
         return new PagedResult<FeatureDto>
         {
             Items = _mapper.Map<IEnumerable<FeatureDto>>(items),

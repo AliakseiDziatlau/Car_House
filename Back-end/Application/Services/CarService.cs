@@ -17,9 +17,15 @@ public class CarService : ICarService
         _mapper = mapper;
     }
 
-    public async Task<PagedResult<CarListDto>> GetAllAsync(int page, int pageSize, Guid? brandId = null)
+    public async Task<PagedResult<CarListDto>> GetAllAsync(
+        int page,
+        int pageSize,
+        List<Guid>? brandIds = null,
+        List<string>? countries = null,
+        List<Guid>? featureIds = null,
+        bool? isAvailable = null)
     {
-        var (items, totalCount) = await _carRepository.GetPagedWithBrandAsync(page, pageSize, brandId);
+        var (items, totalCount) = await _carRepository.GetPagedWithBrandAsync(page, pageSize, brandIds, countries, featureIds, isAvailable);
         return new PagedResult<CarListDto>
         {
             Items = _mapper.Map<IEnumerable<CarListDto>>(items),

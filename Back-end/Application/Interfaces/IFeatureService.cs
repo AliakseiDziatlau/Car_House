@@ -4,7 +4,7 @@ namespace Back_end.Application.Interfaces;
 
 public interface IFeatureService
 {
-    Task<PagedResult<FeatureDto>> GetAllAsync(int page, int pageSize);
+    Task<PagedResult<FeatureDto>> GetAllAsync(int page, int pageSize, List<string>? categories = null);
     Task<FeatureDto?> GetByIdAsync(Guid id);
     Task<FeatureDto> CreateAsync(CreateFeatureDto dto);
     Task<FeatureDto?> UpdateAsync(Guid id, UpdateFeatureDto dto);

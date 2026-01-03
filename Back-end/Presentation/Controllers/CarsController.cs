@@ -20,9 +20,12 @@ public class CarsController : ControllerBase
     public async Task<ActionResult<PagedResult<CarListDto>>> GetAll(
         [FromQuery] int page = 1,
         [FromQuery] int pageSize = 10,
-        [FromQuery] Guid? brandId = null)
+        [FromQuery] List<Guid>? brandIds = null,
+        [FromQuery] List<string>? countries = null,
+        [FromQuery] List<Guid>? featureIds = null,
+        [FromQuery] bool? isAvailable = null)
     {
-        var result = await _carService.GetAllAsync(page, pageSize, brandId);
+        var result = await _carService.GetAllAsync(page, pageSize, brandIds, countries, featureIds, isAvailable);
         return Ok(result);
     }
 

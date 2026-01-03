@@ -13,7 +13,7 @@ export default function ProtectedRoute({ children, roles }: ProtectedRouteProps)
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-64">
-        <div className="text-gray-600">Loading...</div>
+        <div className="text-gray-400">Loading...</div>
       </div>
     );
   }

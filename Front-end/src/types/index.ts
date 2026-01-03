@@ -136,3 +136,50 @@ export interface RegisterRequest {
   firstName: string;
   lastName: string;
 }
+
+export interface Order {
+  id: string;
+  orderDate: string;
+  status: string;
+  totalPrice: number;
+  carModel: string;
+  userEmail: string;
+}
+
+export interface OrderDetail {
+  id: string;
+  userId: string;
+  carId: string;
+  orderDate: string;
+  status: string;
+  totalPrice: number;
+  notes?: string;
+  user: User;
+  car: CarListItem;
+}
+
+export interface CreateOrder {
+  carId: string;
+  notes?: string;
+}
+
+export interface UpdateOrderStatus {
+  status: string;
+}
+
+export interface Role {
+  id: string;
+  name: string;
+}
+
+export interface UpdateUserRole {
+  roleId: string;
+}
+
+export interface CreateUser {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  roleId: string;
+}

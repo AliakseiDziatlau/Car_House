@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { useTranslation } from 'react-i18next';
 import api from '../../services/api';
 import type { Brand } from '../../types';
 
@@ -15,6 +16,7 @@ const brandSchema = z.object({
 type BrandFormData = z.infer<typeof brandSchema>;
 
 export default function BrandForm() {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const isEdit = Boolean(id);
@@ -59,74 +61,76 @@ export default function BrandForm() {
       }
       navigate('/brands');
     } catch {
-      alert('Failed to save brand');
+      alert(t('brands.saveError'));
     }
   };
 
   return (
     <div className="max-w-lg mx-auto">
-      <h1 className="text-2xl font-bold mb-6">{isEdit ? 'Edit Brand' : 'Add Brand'}</h1>
+      <h1 className="text-2xl font-bold mb-6 text-white">
+        {isEdit ? t('brands.editBrand') : t('brands.addBrand')}
+      </h1>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="bg-white rounded-lg shadow p-6">
+      <form onSubmit={handleSubmit(onSubmit)} className="bg-gray-800 rounded-lg shadow p-6">
         <div className="mb-4">
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-            Name
+          <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-1">
+            {t('common.name')}
           </label>
           <input
             type="text"
             id="name"
             {...register('name')}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full h-10 px-3 py-2 border border-gray-600 bg-gray-700/50 text-white rounded-md shadow-sm transition-all duration-150 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/30 placeholder:text-gray-500"
           />
           {errors.name && (
-            <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>
+            <p className="mt-1 text-sm text-red-400">{errors.name.message}</p>
           )}
         </div>
 
         <div className="mb-4">
-          <label htmlFor="country" className="block text-sm font-medium text-gray-700 mb-1">
-            Country
+          <label htmlFor="country" className="block text-sm font-medium text-gray-300 mb-1">
+            {t('brands.country')}
           </label>
           <input
             type="text"
             id="country"
             {...register('country')}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full h-10 px-3 py-2 border border-gray-600 bg-gray-700/50 text-white rounded-md shadow-sm transition-all duration-150 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/30 placeholder:text-gray-500"
           />
           {errors.country && (
-            <p className="mt-1 text-sm text-red-600">{errors.country.message}</p>
+            <p className="mt-1 text-sm text-red-400">{errors.country.message}</p>
           )}
         </div>
 
         <div className="mb-6">
-          <label htmlFor="logoUrl" className="block text-sm font-medium text-gray-700 mb-1">
-            Logo URL (optional)
+          <label htmlFor="logoUrl" className="block text-sm font-medium text-gray-300 mb-1">
+            {t('brands.logoUrl')}
           </label>
           <input
             type="text"
             id="logoUrl"
             {...register('logoUrl')}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full h-10 px-3 py-2 border border-gray-600 bg-gray-700/50 text-white rounded-md shadow-sm transition-all duration-150 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/30 placeholder:text-gray-500"
           />
           {errors.logoUrl && (
-            <p className="mt-1 text-sm text-red-600">{errors.logoUrl.message}</p>
+            <p className="mt-1 text-sm text-red-400">{errors.logoUrl.message}</p>
           )}
         </div>
 
-        <div className="flex gap-4">
+        <div className="flex gap-3">
           <button
             type="submit"
             disabled={isSubmitting}
-            className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:opacity-50"
+            className="flex-1 h-10 bg-orange-500 text-white font-medium rounded-md shadow-sm transition-all duration-150 outline-none hover:bg-orange-600 focus-visible:ring-2 focus-visible:ring-orange-500/50 disabled:opacity-50 disabled:pointer-events-none"
           >
-            {isSubmitting ? 'Saving...' : 'Save'}
+            {isSubmitting ? t('common.saving') : t('common.save')}
           </button>
           <button
             type="button"
             onClick={() => navigate('/brands')}
-            className="flex-1 bg-gray-200 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-300"
+            className="flex-1 h-10 border border-gray-600 bg-gray-800/50 text-white font-medium rounded-md shadow-sm transition-all duration-150 outline-none hover:bg-gray-700 hover:border-gray-500 focus-visible:ring-2 focus-visible:ring-orange-500/50"
           >
-            Cancel
+            {t('common.cancel')}
           </button>
         </div>
       </form>

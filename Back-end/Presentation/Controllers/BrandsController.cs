@@ -17,9 +17,12 @@ public class BrandsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<PagedResult<BrandDto>>> GetAll([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+    public async Task<ActionResult<PagedResult<BrandDto>>> GetAll(
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 10,
+        [FromQuery] List<string>? countries = null)
     {
-        var result = await _brandService.GetAllAsync(page, pageSize);
+        var result = await _brandService.GetAllAsync(page, pageSize, countries);
         return Ok(result);
     }
 

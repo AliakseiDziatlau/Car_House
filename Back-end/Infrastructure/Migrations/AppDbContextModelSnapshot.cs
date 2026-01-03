@@ -40,6 +40,78 @@ namespace Back_end.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Brands");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("b1111111-1111-1111-1111-111111111111"),
+                            Country = "Japan",
+                            LogoUrl = "https://upload.wikimedia.org/wikipedia/commons/e/e7/Toyota.svg",
+                            Name = "Toyota"
+                        },
+                        new
+                        {
+                            Id = new Guid("b2222222-2222-2222-2222-222222222222"),
+                            Country = "Japan",
+                            LogoUrl = "https://upload.wikimedia.org/wikipedia/commons/7/76/Honda_logo.svg",
+                            Name = "Honda"
+                        },
+                        new
+                        {
+                            Id = new Guid("b3333333-3333-3333-3333-333333333333"),
+                            Country = "USA",
+                            LogoUrl = "https://upload.wikimedia.org/wikipedia/commons/a/a0/Ford_Motor_Company_Logo.svg",
+                            Name = "Ford"
+                        },
+                        new
+                        {
+                            Id = new Guid("b4444444-4444-4444-4444-444444444444"),
+                            Country = "Germany",
+                            LogoUrl = "https://upload.wikimedia.org/wikipedia/commons/4/44/BMW.svg",
+                            Name = "BMW"
+                        },
+                        new
+                        {
+                            Id = new Guid("b5555555-5555-5555-5555-555555555555"),
+                            Country = "Germany",
+                            LogoUrl = "https://upload.wikimedia.org/wikipedia/commons/9/90/Mercedes-Benz_Logo_2010.svg",
+                            Name = "Mercedes-Benz"
+                        },
+                        new
+                        {
+                            Id = new Guid("b6666666-6666-6666-6666-666666666666"),
+                            Country = "Germany",
+                            LogoUrl = "https://upload.wikimedia.org/wikipedia/commons/9/92/Audi-Logo_2016.svg",
+                            Name = "Audi"
+                        },
+                        new
+                        {
+                            Id = new Guid("b7777777-7777-7777-7777-777777777777"),
+                            Country = "Germany",
+                            LogoUrl = "https://upload.wikimedia.org/wikipedia/commons/6/6d/Volkswagen_logo_2019.svg",
+                            Name = "Volkswagen"
+                        },
+                        new
+                        {
+                            Id = new Guid("b8888888-8888-8888-8888-888888888888"),
+                            Country = "USA",
+                            LogoUrl = "https://upload.wikimedia.org/wikipedia/commons/1/1f/Logo_Chevrolet.svg",
+                            Name = "Chevrolet"
+                        },
+                        new
+                        {
+                            Id = new Guid("b9999999-9999-9999-9999-999999999999"),
+                            Country = "Japan",
+                            LogoUrl = "https://upload.wikimedia.org/wikipedia/commons/2/23/Nissan_2020_logo.svg",
+                            Name = "Nissan"
+                        },
+                        new
+                        {
+                            Id = new Guid("baaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
+                            Country = "South Korea",
+                            LogoUrl = "https://upload.wikimedia.org/wikipedia/commons/4/44/Hyundai_Motor_Company_logo.svg",
+                            Name = "Hyundai"
+                        });
                 });
 
             modelBuilder.Entity("Back_end.Domain.Entities.Car", b =>
@@ -85,6 +157,128 @@ namespace Back_end.Infrastructure.Migrations
                     b.HasIndex("BrandId");
 
                     b.ToTable("Cars");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("c1111111-1111-1111-1111-111111111111"),
+                            BrandId = new Guid("b1111111-1111-1111-1111-111111111111"),
+                            CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Reliable midsize sedan with excellent fuel economy",
+                            IsAvailable = true,
+                            Mileage = 0,
+                            Model = "Camry",
+                            Price = 28500m,
+                            Year = 2024
+                        },
+                        new
+                        {
+                            Id = new Guid("c2222222-2222-2222-2222-222222222222"),
+                            BrandId = new Guid("b2222222-2222-2222-2222-222222222222"),
+                            CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Compact car with sporty handling and great reliability",
+                            IsAvailable = true,
+                            Mileage = 0,
+                            Model = "Civic",
+                            Price = 24500m,
+                            Year = 2024
+                        },
+                        new
+                        {
+                            Id = new Guid("c3333333-3333-3333-3333-333333333333"),
+                            BrandId = new Guid("b3333333-3333-3333-3333-333333333333"),
+                            CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Iconic American muscle car with V8 power",
+                            IsAvailable = true,
+                            Mileage = 5000,
+                            Model = "Mustang GT",
+                            Price = 42000m,
+                            Year = 2024
+                        },
+                        new
+                        {
+                            Id = new Guid("c4444444-4444-4444-4444-444444444444"),
+                            BrandId = new Guid("b4444444-4444-4444-4444-444444444444"),
+                            CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Luxury sport sedan with dynamic performance",
+                            IsAvailable = true,
+                            Mileage = 0,
+                            Model = "3 Series",
+                            Price = 46000m,
+                            Year = 2024
+                        },
+                        new
+                        {
+                            Id = new Guid("c5555555-5555-5555-5555-555555555555"),
+                            BrandId = new Guid("b5555555-5555-5555-5555-555555555555"),
+                            CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Elegant luxury sedan with advanced technology",
+                            IsAvailable = true,
+                            Mileage = 0,
+                            Model = "C-Class",
+                            Price = 48000m,
+                            Year = 2024
+                        },
+                        new
+                        {
+                            Id = new Guid("c6666666-6666-6666-6666-666666666666"),
+                            BrandId = new Guid("b6666666-6666-6666-6666-666666666666"),
+                            CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Premium compact sedan with Quattro AWD",
+                            IsAvailable = true,
+                            Mileage = 0,
+                            Model = "A4",
+                            Price = 44000m,
+                            Year = 2024
+                        },
+                        new
+                        {
+                            Id = new Guid("c7777777-7777-7777-7777-777777777777"),
+                            BrandId = new Guid("b7777777-7777-7777-7777-777777777777"),
+                            CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Hot hatch with turbocharged performance",
+                            IsAvailable = true,
+                            Mileage = 0,
+                            Model = "Golf GTI",
+                            Price = 32000m,
+                            Year = 2024
+                        },
+                        new
+                        {
+                            Id = new Guid("c8888888-8888-8888-8888-888888888888"),
+                            BrandId = new Guid("b8888888-8888-8888-8888-888888888888"),
+                            CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "American sports car with aggressive styling",
+                            IsAvailable = true,
+                            Mileage = 3000,
+                            Model = "Camaro SS",
+                            Price = 45000m,
+                            Year = 2024
+                        },
+                        new
+                        {
+                            Id = new Guid("c9999999-9999-9999-9999-999999999999"),
+                            BrandId = new Guid("b9999999-9999-9999-9999-999999999999"),
+                            CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Comfortable midsize sedan with AWD option",
+                            IsAvailable = true,
+                            Mileage = 0,
+                            Model = "Altima",
+                            Price = 27000m,
+                            Year = 2024
+                        },
+                        new
+                        {
+                            Id = new Guid("caaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
+                            BrandId = new Guid("baaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
+                            CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Stylish midsize sedan with excellent value",
+                            IsAvailable = true,
+                            Mileage = 0,
+                            Model = "Sonata",
+                            Price = 26500m,
+                            Year = 2024
+                        });
                 });
 
             modelBuilder.Entity("Back_end.Domain.Entities.CarFeature", b =>
@@ -107,6 +301,316 @@ namespace Back_end.Infrastructure.Migrations
                     b.HasIndex("FeatureId");
 
                     b.ToTable("CarFeatures");
+
+                    b.HasData(
+                        new
+                        {
+                            CarId = new Guid("c1111111-1111-1111-1111-111111111111"),
+                            FeatureId = new Guid("f1111111-1111-1111-1111-111111111111"),
+                            AdditionalPrice = 0m,
+                            IsStandard = true
+                        },
+                        new
+                        {
+                            CarId = new Guid("c1111111-1111-1111-1111-111111111111"),
+                            FeatureId = new Guid("f2222222-2222-2222-2222-222222222222"),
+                            AdditionalPrice = 0m,
+                            IsStandard = true
+                        },
+                        new
+                        {
+                            CarId = new Guid("c1111111-1111-1111-1111-111111111111"),
+                            FeatureId = new Guid("f8888888-8888-8888-8888-888888888888"),
+                            AdditionalPrice = 0m,
+                            IsStandard = true
+                        },
+                        new
+                        {
+                            CarId = new Guid("c1111111-1111-1111-1111-111111111111"),
+                            FeatureId = new Guid("f9999999-9999-9999-9999-999999999999"),
+                            AdditionalPrice = 0m,
+                            IsStandard = true
+                        },
+                        new
+                        {
+                            CarId = new Guid("c2222222-2222-2222-2222-222222222222"),
+                            FeatureId = new Guid("f1111111-1111-1111-1111-111111111111"),
+                            AdditionalPrice = 0m,
+                            IsStandard = true
+                        },
+                        new
+                        {
+                            CarId = new Guid("c2222222-2222-2222-2222-222222222222"),
+                            FeatureId = new Guid("f2222222-2222-2222-2222-222222222222"),
+                            AdditionalPrice = 0m,
+                            IsStandard = true
+                        },
+                        new
+                        {
+                            CarId = new Guid("c2222222-2222-2222-2222-222222222222"),
+                            FeatureId = new Guid("f8888888-8888-8888-8888-888888888888"),
+                            AdditionalPrice = 0m,
+                            IsStandard = true
+                        },
+                        new
+                        {
+                            CarId = new Guid("c3333333-3333-3333-3333-333333333333"),
+                            FeatureId = new Guid("f1111111-1111-1111-1111-111111111111"),
+                            AdditionalPrice = 0m,
+                            IsStandard = true
+                        },
+                        new
+                        {
+                            CarId = new Guid("c3333333-3333-3333-3333-333333333333"),
+                            FeatureId = new Guid("f2222222-2222-2222-2222-222222222222"),
+                            AdditionalPrice = 0m,
+                            IsStandard = true
+                        },
+                        new
+                        {
+                            CarId = new Guid("c3333333-3333-3333-3333-333333333333"),
+                            FeatureId = new Guid("fbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"),
+                            AdditionalPrice = 0m,
+                            IsStandard = true
+                        },
+                        new
+                        {
+                            CarId = new Guid("c3333333-3333-3333-3333-333333333333"),
+                            FeatureId = new Guid("f4444444-4444-4444-4444-444444444444"),
+                            AdditionalPrice = 1500m,
+                            IsStandard = false
+                        },
+                        new
+                        {
+                            CarId = new Guid("c4444444-4444-4444-4444-444444444444"),
+                            FeatureId = new Guid("f1111111-1111-1111-1111-111111111111"),
+                            AdditionalPrice = 0m,
+                            IsStandard = true
+                        },
+                        new
+                        {
+                            CarId = new Guid("c4444444-4444-4444-4444-444444444444"),
+                            FeatureId = new Guid("f2222222-2222-2222-2222-222222222222"),
+                            AdditionalPrice = 0m,
+                            IsStandard = true
+                        },
+                        new
+                        {
+                            CarId = new Guid("c4444444-4444-4444-4444-444444444444"),
+                            FeatureId = new Guid("f4444444-4444-4444-4444-444444444444"),
+                            AdditionalPrice = 0m,
+                            IsStandard = true
+                        },
+                        new
+                        {
+                            CarId = new Guid("c4444444-4444-4444-4444-444444444444"),
+                            FeatureId = new Guid("f7777777-7777-7777-7777-777777777777"),
+                            AdditionalPrice = 0m,
+                            IsStandard = true
+                        },
+                        new
+                        {
+                            CarId = new Guid("c4444444-4444-4444-4444-444444444444"),
+                            FeatureId = new Guid("f5555555-5555-5555-5555-555555555555"),
+                            AdditionalPrice = 1200m,
+                            IsStandard = false
+                        },
+                        new
+                        {
+                            CarId = new Guid("c5555555-5555-5555-5555-555555555555"),
+                            FeatureId = new Guid("f1111111-1111-1111-1111-111111111111"),
+                            AdditionalPrice = 0m,
+                            IsStandard = true
+                        },
+                        new
+                        {
+                            CarId = new Guid("c5555555-5555-5555-5555-555555555555"),
+                            FeatureId = new Guid("f2222222-2222-2222-2222-222222222222"),
+                            AdditionalPrice = 0m,
+                            IsStandard = true
+                        },
+                        new
+                        {
+                            CarId = new Guid("c5555555-5555-5555-5555-555555555555"),
+                            FeatureId = new Guid("f4444444-4444-4444-4444-444444444444"),
+                            AdditionalPrice = 0m,
+                            IsStandard = true
+                        },
+                        new
+                        {
+                            CarId = new Guid("c5555555-5555-5555-5555-555555555555"),
+                            FeatureId = new Guid("f7777777-7777-7777-7777-777777777777"),
+                            AdditionalPrice = 0m,
+                            IsStandard = true
+                        },
+                        new
+                        {
+                            CarId = new Guid("c5555555-5555-5555-5555-555555555555"),
+                            FeatureId = new Guid("f6666666-6666-6666-6666-666666666666"),
+                            AdditionalPrice = 0m,
+                            IsStandard = true
+                        },
+                        new
+                        {
+                            CarId = new Guid("c5555555-5555-5555-5555-555555555555"),
+                            FeatureId = new Guid("f3333333-3333-3333-3333-333333333333"),
+                            AdditionalPrice = 0m,
+                            IsStandard = true
+                        },
+                        new
+                        {
+                            CarId = new Guid("c6666666-6666-6666-6666-666666666666"),
+                            FeatureId = new Guid("f1111111-1111-1111-1111-111111111111"),
+                            AdditionalPrice = 0m,
+                            IsStandard = true
+                        },
+                        new
+                        {
+                            CarId = new Guid("c6666666-6666-6666-6666-666666666666"),
+                            FeatureId = new Guid("f2222222-2222-2222-2222-222222222222"),
+                            AdditionalPrice = 0m,
+                            IsStandard = true
+                        },
+                        new
+                        {
+                            CarId = new Guid("c6666666-6666-6666-6666-666666666666"),
+                            FeatureId = new Guid("fccccccc-cccc-cccc-cccc-cccccccccccc"),
+                            AdditionalPrice = 0m,
+                            IsStandard = true
+                        },
+                        new
+                        {
+                            CarId = new Guid("c6666666-6666-6666-6666-666666666666"),
+                            FeatureId = new Guid("f4444444-4444-4444-4444-444444444444"),
+                            AdditionalPrice = 0m,
+                            IsStandard = true
+                        },
+                        new
+                        {
+                            CarId = new Guid("c6666666-6666-6666-6666-666666666666"),
+                            FeatureId = new Guid("f7777777-7777-7777-7777-777777777777"),
+                            AdditionalPrice = 0m,
+                            IsStandard = true
+                        },
+                        new
+                        {
+                            CarId = new Guid("c7777777-7777-7777-7777-777777777777"),
+                            FeatureId = new Guid("f1111111-1111-1111-1111-111111111111"),
+                            AdditionalPrice = 0m,
+                            IsStandard = true
+                        },
+                        new
+                        {
+                            CarId = new Guid("c7777777-7777-7777-7777-777777777777"),
+                            FeatureId = new Guid("f2222222-2222-2222-2222-222222222222"),
+                            AdditionalPrice = 0m,
+                            IsStandard = true
+                        },
+                        new
+                        {
+                            CarId = new Guid("c7777777-7777-7777-7777-777777777777"),
+                            FeatureId = new Guid("faaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
+                            AdditionalPrice = 0m,
+                            IsStandard = true
+                        },
+                        new
+                        {
+                            CarId = new Guid("c7777777-7777-7777-7777-777777777777"),
+                            FeatureId = new Guid("fbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"),
+                            AdditionalPrice = 0m,
+                            IsStandard = true
+                        },
+                        new
+                        {
+                            CarId = new Guid("c8888888-8888-8888-8888-888888888888"),
+                            FeatureId = new Guid("f1111111-1111-1111-1111-111111111111"),
+                            AdditionalPrice = 0m,
+                            IsStandard = true
+                        },
+                        new
+                        {
+                            CarId = new Guid("c8888888-8888-8888-8888-888888888888"),
+                            FeatureId = new Guid("f2222222-2222-2222-2222-222222222222"),
+                            AdditionalPrice = 0m,
+                            IsStandard = true
+                        },
+                        new
+                        {
+                            CarId = new Guid("c8888888-8888-8888-8888-888888888888"),
+                            FeatureId = new Guid("fbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"),
+                            AdditionalPrice = 0m,
+                            IsStandard = true
+                        },
+                        new
+                        {
+                            CarId = new Guid("c8888888-8888-8888-8888-888888888888"),
+                            FeatureId = new Guid("f4444444-4444-4444-4444-444444444444"),
+                            AdditionalPrice = 0m,
+                            IsStandard = true
+                        },
+                        new
+                        {
+                            CarId = new Guid("c9999999-9999-9999-9999-999999999999"),
+                            FeatureId = new Guid("f1111111-1111-1111-1111-111111111111"),
+                            AdditionalPrice = 0m,
+                            IsStandard = true
+                        },
+                        new
+                        {
+                            CarId = new Guid("c9999999-9999-9999-9999-999999999999"),
+                            FeatureId = new Guid("f2222222-2222-2222-2222-222222222222"),
+                            AdditionalPrice = 0m,
+                            IsStandard = true
+                        },
+                        new
+                        {
+                            CarId = new Guid("c9999999-9999-9999-9999-999999999999"),
+                            FeatureId = new Guid("f8888888-8888-8888-8888-888888888888"),
+                            AdditionalPrice = 0m,
+                            IsStandard = true
+                        },
+                        new
+                        {
+                            CarId = new Guid("c9999999-9999-9999-9999-999999999999"),
+                            FeatureId = new Guid("fccccccc-cccc-cccc-cccc-cccccccccccc"),
+                            AdditionalPrice = 2000m,
+                            IsStandard = false
+                        },
+                        new
+                        {
+                            CarId = new Guid("caaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
+                            FeatureId = new Guid("f1111111-1111-1111-1111-111111111111"),
+                            AdditionalPrice = 0m,
+                            IsStandard = true
+                        },
+                        new
+                        {
+                            CarId = new Guid("caaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
+                            FeatureId = new Guid("f2222222-2222-2222-2222-222222222222"),
+                            AdditionalPrice = 0m,
+                            IsStandard = true
+                        },
+                        new
+                        {
+                            CarId = new Guid("caaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
+                            FeatureId = new Guid("f8888888-8888-8888-8888-888888888888"),
+                            AdditionalPrice = 0m,
+                            IsStandard = true
+                        },
+                        new
+                        {
+                            CarId = new Guid("caaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
+                            FeatureId = new Guid("f9999999-9999-9999-9999-999999999999"),
+                            AdditionalPrice = 0m,
+                            IsStandard = true
+                        },
+                        new
+                        {
+                            CarId = new Guid("caaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
+                            FeatureId = new Guid("f3333333-3333-3333-3333-333333333333"),
+                            AdditionalPrice = 0m,
+                            IsStandard = true
+                        });
                 });
 
             modelBuilder.Entity("Back_end.Domain.Entities.Feature", b =>
@@ -132,6 +636,92 @@ namespace Back_end.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Features");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("f1111111-1111-1111-1111-111111111111"),
+                            Category = "Safety",
+                            Description = "Anti-lock Braking System prevents wheel lockup during braking",
+                            Name = "ABS"
+                        },
+                        new
+                        {
+                            Id = new Guid("f2222222-2222-2222-2222-222222222222"),
+                            Category = "Safety",
+                            Description = "Front and side airbags for driver and passenger protection",
+                            Name = "Airbags"
+                        },
+                        new
+                        {
+                            Id = new Guid("f3333333-3333-3333-3333-333333333333"),
+                            Category = "Safety",
+                            Description = "Alerts driver to vehicles in blind spots",
+                            Name = "Blind Spot Monitor"
+                        },
+                        new
+                        {
+                            Id = new Guid("f4444444-4444-4444-4444-444444444444"),
+                            Category = "Comfort",
+                            Description = "Premium leather upholstery",
+                            Name = "Leather Seats"
+                        },
+                        new
+                        {
+                            Id = new Guid("f5555555-5555-5555-5555-555555555555"),
+                            Category = "Comfort",
+                            Description = "Panoramic glass sunroof",
+                            Name = "Sunroof"
+                        },
+                        new
+                        {
+                            Id = new Guid("f6666666-6666-6666-6666-666666666666"),
+                            Category = "Comfort",
+                            Description = "Front heated seats for cold weather comfort",
+                            Name = "Heated Seats"
+                        },
+                        new
+                        {
+                            Id = new Guid("f7777777-7777-7777-7777-777777777777"),
+                            Category = "Technology",
+                            Description = "Built-in GPS navigation with real-time traffic",
+                            Name = "Navigation System"
+                        },
+                        new
+                        {
+                            Id = new Guid("f8888888-8888-8888-8888-888888888888"),
+                            Category = "Technology",
+                            Description = "Wireless phone and audio connectivity",
+                            Name = "Bluetooth"
+                        },
+                        new
+                        {
+                            Id = new Guid("f9999999-9999-9999-9999-999999999999"),
+                            Category = "Technology",
+                            Description = "Rear-view camera for safe reversing",
+                            Name = "Backup Camera"
+                        },
+                        new
+                        {
+                            Id = new Guid("faaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
+                            Category = "Performance",
+                            Description = "Turbocharged engine for enhanced power",
+                            Name = "Turbo Engine"
+                        },
+                        new
+                        {
+                            Id = new Guid("fbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"),
+                            Category = "Performance",
+                            Description = "Performance-tuned suspension system",
+                            Name = "Sport Suspension"
+                        },
+                        new
+                        {
+                            Id = new Guid("fccccccc-cccc-cccc-cccc-cccccccccccc"),
+                            Category = "Performance",
+                            Description = "AWD system for improved traction",
+                            Name = "All-Wheel Drive"
+                        });
                 });
 
             modelBuilder.Entity("Back_end.Domain.Entities.Order", b =>
@@ -251,11 +841,11 @@ namespace Back_end.Infrastructure.Migrations
                         new
                         {
                             Id = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
-                            CreatedAt = new DateTime(2025, 12, 25, 23, 45, 27, 637, DateTimeKind.Utc).AddTicks(2480),
+                            CreatedAt = new DateTime(2026, 1, 3, 17, 23, 46, 448, DateTimeKind.Utc).AddTicks(7380),
                             Email = "admin@carhouse.com",
                             FirstName = "Admin",
                             LastName = "User",
-                            PasswordHash = "$2a$11$D43qRZXX4Kgy6t6XZV8me.wWygQz5N1.ejkDnO26RpjrYWRi8Ul8G",
+                            PasswordHash = "$2a$11$XtfjIo.ZQyLC7ULml/1cVu7Wm8VavvEtqHgokaQk3gi.q0bL9w.7G",
                             RoleId = new Guid("11111111-1111-1111-1111-111111111111")
                         });
                 });
